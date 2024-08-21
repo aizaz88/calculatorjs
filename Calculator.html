@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <title>Calculator</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        .calculator {
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #e6e6e6;
+            max-width: 400px;
+        }
+        .calculator input {
+            height: 60px;
+            font-size: 2em;
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        .calculator button {
+            width: 100%;
+            height: 60px;
+            font-size: 1.5em;
+            margin: 5px 0;
+        }
+        .row {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <section class="container calculator">
+        <div class="text-center">
+            <input type="text" id="input" class="form-control" readonly>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <button class="btn btn-secondary">CE</button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-secondary">C</button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-secondary">⌫</button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-secondary">÷</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <button class="btn btn-light">7</button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-light">8</button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-light">9</button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-secondary">x</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <button class="btn btn-light">4</button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-light">5</button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-light">6</button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-secondary">-</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <button class="btn btn-light">1</button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-light">2</button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-light">3</button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-secondary">+</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <button class="btn btn-light">±</button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-light">0</button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-light">.</button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-secondary">=</button>
+            </div>
+        </div>
+    </section>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded',()=>{
+            const input=document.getElementById('input');
+            const buttons=document.querySelectorAll('button');
+            let currentInput='';
+            let previousInput='';
+            let operator='';
+
+         buttons.forEach(button =>{
+            button.addEventListener('click',()=>{
+             let value=button.textContent; 
+             
+             if (value === 'C') {
+                        currentInput = '';
+                        previousInput = '';
+                        operator = '';
+                        input.value = '';
+                    }else if(value==='CE'){
+                        currentInput = '';
+                        previousInput = '';
+                        operator = '';
+                        input.value = '';
+                    } else if (value === '⌫') {
+                        currentInput = currentInput.slice(0, -1);
+                        input.value = currentInput;
+                    } else if (['+', '-', 'x', '÷'].includes(value)) {
+                        if (currentInput) {
+                            previousInput = currentInput;
+                            currentInput = '';
+                            operator = value;
+                        }
+                    }else if(value==='='){
+                        if (currentInput && previousInput && operator) {
+                            currentInput=calculate(previousInput,currentInput,operator);
+                            input.value=currentInput;
+                            previousInput = '';
+                            operator = '';
+                        }
+                    }else {
+                        currentInput += value;
+                        input.value = currentInput;
+                    }
+            });
+         });
+
+            function calculate(n1,n2,op){
+            let num1=parseFloat(n1);
+            let num2=parseFloat(n2);
+            
+            switch (op) {
+                case '+':
+                        return (num1 + num2).toString();
+                    case '-':
+                        return (num1 - num2).toString();
+                    case 'x':
+                        return (num1 * num2).toString();
+                    case '÷':
+                        return (num1 / num2).toString();
+                    default:
+                        return '';
+            }
+        }
+        });
+
+        
+        /*
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('input');
+            const buttons = document.querySelectorAll('button');
+            let currentInput = '';
+            let previousInput = '';
+            let operator = '';
+
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const value = button.textContent;
+
+                    if (value === 'C') {
+                        currentInput = '';
+                        previousInput = '';
+                        operator = '';
+                        input.value = '';
+                    } else if (value === 'CE') {
+                        currentInput = '';
+                        input.value = '';
+                    } else if (value === '⌫') {
+                        currentInput = currentInput.slice(0, -1);
+                        input.value = currentInput;
+                    } else if (['+', '-', 'x', '÷'].includes(value)) {
+                        if (currentInput) {
+                            previousInput = currentInput;
+                            currentInput = '';
+                            operator = value;
+                        }
+                    } else if (value === '=') {
+                        if (currentInput && previousInput && operator) {
+                            currentInput = calculate(previousInput, currentInput, operator);
+                            input.value = currentInput;
+                            previousInput = '';
+                            operator = '';
+                        }
+                    } else {
+                        currentInput += value;
+                        input.value = currentInput;
+                    }
+                });
+            });
+
+            function calculate(n1, n2, op) {
+                const num1 = parseFloat(n1);
+                const num2 = parseFloat(n2);
+
+                switch (op) {
+                    case '+':
+                        return (num1 + num2).toString();
+                    case '-':
+                        return (num1 - num2).toString();
+                    case 'x':
+                        return (num1 * num2).toString();
+                    case '÷':
+                        return (num1 / num2).toString();
+                    default:
+                        return '';
+                }
+            }
+        });
+        */
+    </script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
